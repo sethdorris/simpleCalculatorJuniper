@@ -11,17 +11,14 @@ namespace SimpleCalculator
     {
         public string getOperator(string input)
         {
-            if (AreSpaces(input))
-            {
-                string inputWithOutSpaces = removeSpaces(input);
-            }
-            return "+";
+            string[] inputArray = getInputStringArray(input);
+            return inputArray[1];
         }
 
         public int getNumberOne(string input)
         {
             int num1;
-            string[] inputArray = Regex.Split(input, @"([-+*/])");
+            string[] inputArray = getInputStringArray(input);
             int.TryParse(inputArray[0], out num1);
             return num1;
         }
@@ -29,7 +26,7 @@ namespace SimpleCalculator
         public int getNumberTwo(string input)
         {
             int num2;
-            string[] inputArray = Regex.Split(input, @"([-+*/])");
+            string[] inputArray = getInputStringArray(input);
             int.TryParse(inputArray[2], out num2);
             return num2;
         }
@@ -56,6 +53,19 @@ namespace SimpleCalculator
             } else
             {
                 return false;
+            }
+        }
+
+        public bool detectInputErrors(string input)
+        {
+            Match m = Regex.Match(input, @"[-]{0,1}[\d\s]+[*/+%-]{1}[\s]{0,1}[-]{0,1}[\d\s]+");
+            if (m.Success)
+            {
+                return false;
+            }
+ else
+            {
+                throw new InvalidOperationException(); 
             }
         }
     }
