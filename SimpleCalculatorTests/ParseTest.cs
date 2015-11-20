@@ -39,10 +39,18 @@ namespace SimpleCalculatorTests
         }
 
         [TestMethod]
-        public void ParseEnsureICanGetFirstNumber()
+        public void ParseEnsureICanGetFirstNumberWithoutSpaces()
         {
             Parse p = new Parse();
             string input = "2+3";
+            Assert.AreEqual(2, p.getNumberOne(input));
+        }
+
+        [TestMethod]
+        public void ParseEnsureICanGetFirstNumberWithSpaces()
+        {
+            Parse p = new Parse();
+            string input = "2 + 3";
             Assert.AreEqual(2, p.getNumberOne(input));
         }
 
@@ -69,6 +77,39 @@ namespace SimpleCalculatorTests
             Parse p = new Parse();
             string input = "2+1";
             Assert.AreEqual(1, p.getNumberTwo(input));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ParseEnsureICanDetectBadInputWithTwoOperators()
+        {
+            Parse p = new Parse();
+            string input = "2 ++ 2";
+            p.detectInputErrors(input);
+        }
+
+        [TestMethod]
+        public void ParseEnsureICanDetectGoodInputWithTwoPositiveNumbers()
+        {
+            Parse p = new Parse();
+            string input = "2 + 6";
+            Assert.IsFalse(p.detectInputErrors(input));
+        }
+
+        [TestMethod]
+        public void ParseEnsureICanDetectGoodInputWithAPostiveAndNegativeNumber()
+        {
+            Parse p = new Parse();
+            string input = "2 + -3";
+            Assert.IsFalse(p.detectInputErrors(input));
+        }
+
+        [TestMethod]
+        public void ParseEnsureICanDetectGoodInputWithANegativeAndAPositiveNumber()
+        {
+            Parse p = new Parse();
+            string input = "-3 + -3";
+            Assert.IsFalse(p.detectInputErrors(input));
         }
     }
 }
